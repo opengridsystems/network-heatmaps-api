@@ -1,0 +1,762 @@
+openapi: "3.0.0"
+info:
+  description: "This is the Ofgem network heatmap data JSON API standard. An example of this data being used can be found at [www.opengrid.com/heatmaps-example/](https://www.opengrid.com/heatmaps-example/)"
+  version: "0.9.0"
+  title: "Ofgem Heatmap API"
+  contact:
+    name: "Open Grid Systems Ltd"
+    url: "https://www.opengrid.com/heatmaps-api/"
+    email: "alan@opengrid.com"
+  termsOfService: "https://www.ofgem.gov.uk"
+  license:
+    name: "Open Government License 3.0"
+    url: "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+paths:
+  /HeatmapDataSet/{identifier}:
+    get:
+      parameters:
+        - name: identifier
+          in: path
+          description: "Unique ID of HeatmapDataSet to return"
+          required: false
+          schema:
+            type: string
+            format: String
+      summary: "Get HeatmapDataSet"
+      description: "Get a substation by identifier"
+      operationId: "getHeatmapDataSet"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HeatmapDataSet"
+          description: Successful operation
+components:
+  schemas:
+    HeatmapDataSet:
+      type: object
+      properties:
+        contributor:
+          type: string
+          format: String
+          description: "An entity responsible for making contributions to the resource.  (http://purl.org/dc/terms/contributor)"
+        coverage:
+          type: string
+          format: String
+          description: "The spatial or temporal topic of the resource, spatial applicability of the resource, or jurisdiction under which the resource is relevant. http://purl.org/dc/terms/coverage (http://purl.org/dc/terms/contributor)"
+        creator:
+          type: string
+          format: String
+          description: "An entity responsible for making the resource. (http://purl.org/dc/terms/creator)"
+        date:
+          type: string
+          format: date-time
+          description: "A point of time associated with an event in the lifecycle of the resource. For this implementation this will represent the date the data set is valid from (http://purl.org/dc/terms/date)"
+        description:
+          type: string
+          format: String
+          description: "An account of the resource. (http://purl.org/dc/terms/description)"
+        format:
+          type: string
+          format: String
+          description: "The file format of the resource (http://purl.org/dc/terms/format)"
+        identifier:
+          type: string
+          format: String
+          description: "An unambiguous reference to the resource within a given context. (http://purl.org/dc/terms/identifier)"
+        issued:
+          type: string
+          format: date-time
+          description: "Date of formal issuance of the resource. (http://purl.org/dc/terms/issued)"
+        language:
+          type: string
+          format: String
+          description: "A language of the resource. (http://purl.org/dc/terms/language)"
+        publisher:
+          type: string
+          format: String
+          description: "An entity responsible for making the resource available. (http://purl.org/dc/terms/publisher)"
+        rights:
+          type: string
+          format: URI
+          description: "Information about rights held in and over the resource. (http://purl.org/dc/terms/rights)"
+        title:
+          type: string
+          format: String
+          description: "A name given to the resource. (http://purl.org/dc/terms/title)"
+        valid:
+          type: array
+          items:
+            type: string
+            format: date-time
+          description: "A date range for the validity of a resource. This should be two dates  to form a range. The first date is inclusive and the second date exclusive (http://purl.org/dc/terms/valid)"
+        Substations:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Substation"
+          description: "A list of substations with heatmap data ()"
+        Circuits:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Circuit"
+          description: "A list of circuits with heatmap data ()"
+      required:
+        - contributor
+        - coverage
+        - creator
+        - date
+        - description
+        - format
+        - identifier
+        - issued
+        - language
+        - publisher
+        - rights
+        - title
+        - valid
+    Substation:
+      type: object
+      properties:
+        mRID:
+          type: string
+          format: Identifier
+          description: "The Master Resource ID of the Substation. Persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM Substation ()"
+        name:
+          type: string
+          format: String
+          description: "The human readable name of the substation ()"
+        type:
+          type: string
+          enum: 
+            - GSP
+            - BSP
+            - Primary
+            - Secondary
+          description: "The type of the substation ()"
+        area:
+          type: string
+          format: LicenseArea
+          description: "The name of the license area (e.g. North Scotland, South East England, South Wales)  ()"
+        shortCode:
+          type: string
+          format: SubstationCode
+          description: "Short code name for substation (alphanumeric, uppercase letters only) ()"
+        description:
+          type: string
+          format: String
+          description: "Free text for any additional descriptive data about the substation ()"
+        voltages:
+          type: array
+          items:
+            type: number
+            format: kV
+          description: "The voltages at the Substation in Kilovolts (kV) ()"
+        longitude:
+          type: number
+          format: DecimalDegrees
+          description: "The longitude value of the substation as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the feature itself allowing for more complex geometry ()"
+        latitude:
+          type: number
+          format: DecimalDegrees
+          description: "The latitude value of the substation as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the feature itself allowing for more complex geometry ()"
+        GSP:
+          type: string
+          format: Identifier
+          description: "The name of the GSP this Substation is within. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP Substation will not have this reference ()"
+        BSP:
+          type: string
+          format: Identifier
+          description: "The identifier of the BSP this Substation is supplied by. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP or BSP Substation will not have this reference, and the Scottish networks do not have BSPs ()"
+        Primary:
+          type: string
+          format: Identifier
+          description: "The identifier of the Primary this Substation is supplied by. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP, BSP or Primary Substation will not have this reference ()"
+        loadTotalCapacity:
+          type: number
+          format: MVA
+          description: "The firm capacity for load at the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation ()"
+        loadConnectedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all load currently connected at the substation. This includes individual loads and storage that are explicitly defined and aggregate value of other connect loads and storage. The value for loadConnectedCapacity must be greater than or equal to the sum of the loadConnectedCapacity values in the Load and Storage elements ()"
+        loadContractedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all load currently contracted at the substation which is not yet connected  (i.e. do not include any load that is included in loadConnectedCapacity). This includes individual loads and storage that are explicitly defined and aggregate value of other connect loads and storage. The value for loadContractedCapacity must be greater than or equal to the sum of the loadContractedCapacity values in the Load and Storage elements ()"
+        loadQuotedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all load currently quoted at the substation excluding contracted and connected (i.e. does not include loadConnectedCapacity or loadContractedCapacity). This includes individual loads and storage that are explicitly defined and aggregate value of other connect loads and storage. The value for loadQuotedCapacity must be greater than or equal to the sum of the loadQuotedCapacity values in the Load and Storage elements ()"
+        loadAvailableCapacity:
+          type: number
+          format: MVA
+          description: "Available load capacity at the substation calculated as: loadTotalCapacity - (loadMaximum + loadContractedCapacity) ()"
+        loadMaximum:
+          type: number
+          format: MVA
+          description: "The maximum load at the substation. This is a normalised value calculated using historic measured values during normal operating conditions .The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if  corrected, net load data is not available, the value should be omitted ()"
+        loadMinimum:
+          type: number
+          format: MVA
+          description: "The minimum load at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if corrected, net load data is not available, the value should be omitted. ()"
+        load99Percentile:
+          type: number
+          format: MVA
+          description: "The 99th percentile of loading at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if corrected, net load data is not available,  the value should be omitted. ()"
+        load75Percentile:
+          type: number
+          format: MVA
+          description: "The 75th percentile of loading at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if corrected, net load data is not available,  the value should be omitted. ()"
+        load50Percentile:
+          type: number
+          format: MVA
+          description: "The 50th percentile of loading at the substation. This is a normalised value calculated using historic measured values during normal operating conditions.  The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if corrected, net load data is not available,  the value should be omitted."
+        load25Percentile:
+          type: number
+          format: MVA
+          description: "The 25th percentile of loading at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if  corrected, net load data is not available,  the value should be omitted."
+        loadConstraint:
+          type: string
+          enum: 
+            - Red
+            - Amber
+            - Green
+          description: "A RAG definition of the load constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation ()"
+        loadConstraintLimitingFactor:
+          type: string
+          enum: 
+            - Thermal
+            - FaultLevel
+          description: "The limiting factor for load constraints, either thermal or fault level ()"
+        generationTotalCapacity:
+          type: number
+          format: MVA
+          description: "The total firm generation capacity of the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation ()"
+        generationConnectedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all generation currently connected at the substation. This includes individual generation and storage that are explicitly defined and aggregate value of other connect generation and storage. The value forgenerationConnectedCapacity must be greater than or equal to the sum of the generationConnectedCapacity values in the Generator and Storage elements ()"
+        generationContractedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all generation currently contracted at the substation which is not yet connected  (i.e. do not include any generation that is included in generationConnectedCapacity). This includes individual generation and storage that are explicitly defined and aggregate value of other connect generation and storage. The value for generationContractedCapacity must be greater than or equal to the sum of the generationContractedCapacity values in the Generator and Storage elements ()"
+        generationQuotedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all quoted currently generation at the substation excluding any that are already contracted or connected. This includes individual generation and storage that are explicitly defined and aggregate value of other connect generation and storage. The value for generationQuotedCapacity must be greater than or equal to the sum of the generationQuotedCapacity values in the Generator and Storage elements ()"
+        generationAvailableCapacity:
+          type: number
+          format: MVA
+          description: "Available generation capacity at the substation calculated as: generationTotalCapacity - (generationConnectedCapacity +generationContractedCapacity) + loadMinimum ()"
+        generationConstraint:
+          type: string
+          enum: 
+            - Red
+            - Amber
+            - Green
+          description: "A RAG definition of the load constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation ()"
+        generationConstraintLimitingFactor:
+          type: string
+          enum: 
+            - Thermal
+            - FaultLevel
+          description: "The limiting factor for generation constraints, either thermal or fault level"
+        breakerRatedCurrent:
+          type: number
+          format: kA
+          description: "The rated normal current of the circuit breaker is the RMS value of the current with which the circuit breaker shall be able to carry continuously"
+        breakerBreakingCapacity:
+          type: number
+          format: kA
+          description: "The short-circuit current that the breakers are capable of breaking. It is expressed in KA RMS at contact separation"
+        breakerMakingCapacity:
+          type: number
+          format: kA
+          description: "The making current of the circuit breaker, when closed on a short circuit, is the peak value of the maximum current wave (including dc component) in the first cycle of the current after the circuit is closed by the circuit breaker"
+        breakerAvailableCapacity:
+          type: number
+          format: kA
+          description: "The available capacity of the circuit breaker"
+        breakerShortCircuitCurrent:
+          type: number
+          format: kA
+          description: "The short circuit current of a circuit breaker is the RMS value of current that a breaker can carry in a fully closed condition without damage, for the specified time interval under prescribed condition. These ratings are based on thermal limitation"
+        breakerShortCircuitDuration:
+          type: number
+          format: Seconds
+          description: "Specified time interval the Short Circuit Current can be carried for without damage"
+        reversePowerFlowTotalCapacity:
+          type: number
+          format: MVA
+          description: "The reverse capacity for the substation from lower to higher voltage levels. 0 if there are no reverse powerflow capabilities"
+        reversePowerFlowAvailableCapacity:
+          type: number
+          format: MVA
+          description: "The available reverse capacity for the substation from lower to higher voltage levels."
+        embeddedCapacityRegister:
+          type: string
+          format: Link
+          description: "A URL to the embedded capacity register entry for this station"
+        Loads:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Load"
+          description: "The loads at the station covering connected, contracted and quoted"
+        Generators:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Generator"
+          description: "The generators at the station covering connected, contracted and quoted"
+        Storage:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Storage"
+          description: "The storage devices at the station covering connected, contracted and quoted ()"
+        OtherConstraints:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Constraint"
+          description: "An additional constraint on the Substation."
+        Transformers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Transformer"
+          description: "The transformers connected at the substation"
+        Curtailments:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Curtailment"
+          description: "Curtailments at the Substation"
+      required:
+        - mRID
+        - name
+        - type
+        - shortCode
+        - voltages
+        - longitude
+        - latitude
+        - loadTotalCapacity
+        - loadConnectedCapacity
+        - loadContractedCapacity
+        - loadAvailableCapacity
+        - loadConstraint
+        - loadConstraintLimitingFactor
+        - generationTotalCapacity
+        - generationConnectedCapacity
+        - generationContractedCapacity
+        - generationAvailableCapacity
+        - generationConstraint
+        - generationConstraintLimitingFactor
+        - breakerRatedCurrent
+        - breakerBreakingCapacity
+        - breakerAvailableCapacity
+        - reversePowerFlowTotalCapacity
+        - reversePowerFlowAvailableCapacity
+    Circuit:
+      type: object
+      description: "A circuit representing a connection between substations. This could be an HV circuit between stations or a circuit feeding multiple stations from a primary"
+      properties:
+        mRID:
+          type: string
+          format: Identifier
+          description: "The Master Resource ID of the Circuit. Persistent across each release of the data"
+        name:
+          type: string
+          format: String
+          description: "The human readable name of the circuit"
+        description:
+          type: string
+          format: String
+          description: "Free text for any additional descriptive data about the circuit"
+        voltage:
+          type: number
+          format: kV
+          description: "Voltage of the circuit"
+        loadMaximum:
+          type: number
+          format: MVA
+          description: "The maximum loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions.  The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
+        loadMinimum:
+          type: number
+          format: MVA
+          description: "The minimum loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if corrected, net load data is not available, the value should be omitted."
+        load99Percentile:
+          type: number
+          format: MVA
+          description: "The 99th percentile of loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
+        load75Percentile:
+          type: number
+          format: MVA
+          description: "The 75th percentile of loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
+        load50Percentile:
+          type: number
+          format: MVA
+          description: "The 50th percentile of loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
+        load25Percentile:
+          type: number
+          format: MVA
+          description: "The 25th percentile of loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
+        loadConstraint:
+          type: string
+          enum: 
+            - Red
+            - Amber
+            - Green
+          description: "A RAG definition of the load constraints on the circuit. A utility should provide details on how this RAG status is calculated"
+        loadTotalCapacity:
+          type: number
+          format: MVA
+          description: "The firm capacity for load at the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation"
+        loadAvailableCapacity:
+          type: number
+          format: MVA
+          description: "Available load capacity on the circuit calculated as: loadTotalCapacity - (loadMaximum + loadContractedCapacity)"
+        loadConnectedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all load currently connected on the circuit"
+        loadContractedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all load currently contracted on the circuit which are not yet connected  (i.e. do not include any load that is included in loadConnectedCapacity)."
+        loadQuotedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all load currently quoted on the circuit excluding contracted and connected (i.e. does not include loadConnectedCapacity or loadContractedCapacity)."
+        rating:
+          type: number
+          format: MVA
+          description: "Minimum rated section in the circuit (i.e. limiting series element)"
+        FromSubstation:
+          type: string
+          format: Identifier
+          description: "mRID of the Substation the Circuit is from"
+        ToSubstation:
+          type: array
+          items:
+            type: string
+            format: Identifier
+          description: "mRID of the Substations the Circuit is to (optional if LV circuits are shown but no LV/Secondary substations)"
+        OtherConstraints:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Constraint"
+          description: "An additional constraint on the Circuit."
+        Geometry:
+          "$ref": "#/components/schemas/Geometry"
+          description: "The geometry of the circuit"
+      required:
+        - mRID
+        - name
+        - voltage
+        - loadConstraint
+        - FromSubstation
+    Load:
+      type: object
+      description: "Represents an individual or aggregated generator at the substation. This may represent the aggregation of all generation at a voltage level or individual connected/contracted/quoted generators"
+      properties:
+        mRID:
+          type: string
+          format: Identifier
+          description: "The Master Resource ID of the Load. Persistent across each release of the data"
+        name:
+          type: string
+          format: String
+          description: "The human readable name of the load"
+        aggregate:
+          type: boolean
+          format: Boolean
+          description: "True if the load represents an aggregation of multiple loads all connected at a single voltage level"
+        loadConnectedCapacity:
+          type: number
+          format: MVA
+          description: "The currently connected load capacity"
+        loadContractedCapacity:
+          type: number
+          format: MVA
+          description: "The currently contracted load capacity which is not yet connected  (i.e. do not include any load that is included in loadConnectedCapacity)"
+        loadQuotedCapacity:
+          type: number
+          format: MVA
+          description: "The currently active quoted load capacity excluding contracted and connected (this is optional as connected/contracted generation may not have records of quotes and after a value is contracted this value is no longer relevant)"
+        voltage:
+          type: number
+          format: kV
+          description: "The voltage the load is connected at"
+        technologyType:
+          type: string
+          format: String
+          description: "The technology the connected load"
+      required:
+        - mRID
+        - name
+        - aggregate
+        - loadConnectedCapacity
+        - loadContractedCapacity
+        - voltage
+    Generator:
+      type: object
+      description: "Represents an individual or aggregated generator at the substation. This may represent the aggregation of all generation at a voltage level or individual connected/contracted/quoted generators"
+      properties:
+        mRID:
+          type: string
+          format: Identifier
+          description: "The Master Resource ID of the Load. Persistent across each release of the data"
+        name:
+          type: string
+          format: String
+          description: "The human readable name of the generator"
+        aggregate:
+          type: boolean
+          format: Boolean
+          description: "True if the generator represents an aggregation of multiple generators all connected at a single voltage level"
+        generationConnectedCapacity:
+          type: number
+          format: MVA
+          description: "The currently connected generation capacity"
+        generationContractedCapacity:
+          type: number
+          format: MVA
+          description: "The currently contracted generation capacity excluding any that are already contracted or connected  (i.e. do not include any generation that is included in generationConnectedCapacity)"
+        generationQuotedCapacity:
+          type: number
+          format: MVA
+          description: "The currently active quoted generation capacity above contracted (this is optional as connected/contracted generation may not have records of quotes and after a value is contracted this value is no longer relevant)"
+        voltage:
+          type: number
+          format: kV
+          description: "The voltage the generator is connected at"
+        technologyType:
+          type: string
+          format: String
+          description: "The technology the connected generation e.g. CHP, Wind, PV, Battery"
+      required:
+        - mRID
+        - name
+        - aggregate
+        - generationConnectedCapacity
+        - generationContractedCapacity
+        - voltage
+    Storage:
+      type: object
+      description: "Represents an individual or aggregated storage at the substation. This may represent the aggregation of all storage at a voltage level or individual connected/contracted/quoted storage"
+      properties:
+        mRID:
+          type: string
+          format: Identifier
+          description: "The Master Resource ID of the Stroage device. Persistent across each release of the data"
+        name:
+          type: string
+          format: String
+          description: "The human readable name of the storage device"
+        aggregate:
+          type: boolean
+          format: Boolean
+          description: "True if the generator represents an aggregation of multiple storage devices all connected at a single voltage level"
+        loadConnectedCapacity:
+          type: number
+          format: MVA
+          description: "The currently connected load capacity"
+        loadContractedCapacity:
+          type: number
+          format: MVA
+          description: "The currently contracted load capacity which is not yet connected  (i.e. do not include any load that is included in loadConnectedCapacity)"
+        loadQuotedCapacity:
+          type: number
+          format: MVA
+          description: "The currently active quoted load capacity excluding contracted and connected (this is optional as connected/contracted generation may not have records of quotes and after a value is contracted this value is no longer relevant)"
+        generationConnectedCapacity:
+          type: number
+          format: MVA
+          description: "The currently connected generation capacity"
+        generationContractedCapacity:
+          type: number
+          format: MVA
+          description: "The currently contracted generation capacity excluding any that are already contracted or connected  (i.e. do not include any generation that is included in generationConnectedCapacity)"
+        generationQuotedCapacity:
+          type: number
+          format: MVA
+          description: "The currently active quoted generation capacity above contracted (this is optional as connected/contracted generation may not have records of quotes and after a value is contracted this value is no longer relevant)"
+        voltage:
+          type: number
+          format: kV
+          description: "The voltage the storage is connected at"
+        technologyType:
+          type: string
+          format: String
+          description: "The technology the connected generation e.g. PumpStorage, Battery"
+      required:
+        - mRID
+        - name
+        - aggregate
+        - loadConnectedCapacity
+        - loadContractedCapacity
+        - generationConnectedCapacity
+        - generationContractedCapacity
+        - voltage
+    Transformer:
+      type: object
+      description: "A transformer at a substation. Optional but can be useful if ratings and capacity are required on a per-transformer level"
+      properties:
+        mRID:
+          type: string
+          format: Identifier
+          description: "The Master Resource ID of the Substation. Persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM PowerTransformer"
+        name:
+          type: string
+          format: String
+          description: "The human readable name of the storage device"
+        voltages:
+          type: array
+          items:
+            type: number
+            format: kV
+          description: "The primary, secondary (and optional tertiary) voltages of the transformer"
+        Ratings:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Rating"
+          description: "The ratings of the transformer as defined by the Ratings element"
+      required:
+        - mRID
+        - name
+        - voltages
+    Rating:
+      type: object
+      description: "A rating assigned to a transformer. This would allow multiple ratings to be defined for a single transformer e.g. OFAF ONAN and different ratings for different voltages (e.g. 11->33 is different from 33->11 for reverse powerflow)"
+      properties:
+        name:
+          type: string
+          format: String
+          description: "Human readble name of the rating"
+        rating:
+          type: number
+          format: MVA
+          description: "Rating in MVA"
+        fromVoltage:
+          type: number
+          format: kV
+          description: "From voltage for the rating"
+        toVoltage:
+          type: number
+          format: kV
+          description: "To voltage for the rating"
+      required:
+        - name
+        - rating
+        - fromVoltage
+        - toVoltage
+    Constraint:
+      type: object
+      description: "An additional constraint on the Substation or Circuit. This is intended for non-numeric constraints e.g. to denote physical restrictions on reinforcement"
+      properties:
+        name:
+          type: string
+          format: String
+          description: "Human readable name of the constraint"
+        description:
+          type: string
+          format: String
+          description: "Free text for any additional descriptive data about the constraint"
+        type:
+          type: string
+          enum: 
+            - Voltage
+            - Physical
+            - Other
+          description: "The type of constraint (enumerated field to allow for easier processing/identification)"
+      required:
+        - name
+        - description
+        - type
+    Geometry:
+      type: object
+      description: "The geometry of the line, this will be one or more Lines i.e. series of ordered coordinates. Multiple Lines allowed to allow for radial geometries. It is likely that this will be rendered as a GeoJSON geometry in that format"
+      properties:
+        type:
+          type: string
+          format: String
+          description: "The geometry type (LineString or MultiLineString)"
+        Lines:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Line"
+          description: "The Line elements"
+    Line:
+      type: object
+      description: "A series of coordinates"
+      properties:
+        Coordinates:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Coordinate"
+          description: "2 or more coordinates for a line"
+    Coordinate:
+      type: object
+      description: "A coordinate of latitude/longitude"
+      properties:
+        longitude:
+          type: number
+          format: DecimalDegrees
+          description: "The longitude value of the coordinate as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the LineString geometry"
+        latitude:
+          type: number
+          format: DecimalDegrees
+          description: "The latitude value of the coordinate as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the LineString geometry"
+      required:
+        - longitude
+        - latitude
+    Curtailment:
+      type: object
+      description: "Curtailment of load or generation capacity at the substation with optional day/time and season parameters"
+      properties:
+        name:
+          type: string
+          format: String
+          description: "Human readable name of the curtailment"
+        description:
+          type: string
+          format: String
+          description: "Free text for any additional descriptive data about the curtailment"
+        type:
+          type: string
+          enum: 
+            - Load
+            - Generation
+          description: "The type of curtailment (enumerated field to allow for easier processing/identification)"
+        curtailedBy:
+          type: number
+          format: MVA
+          description: "The amount the load/generation capacity is curtailed by"
+        technologyType:
+          type: string
+          format: String
+          description: "The technology the curtailment applies to e.g for generation  CHP, Wind, PV, Battery"
+        season:
+          type: string
+          enum: 
+            - Spring
+            - Summer
+            - Autumn
+            - Winter
+          description: "The season this curtailment applies during"
+        dayType:
+          type: string
+          enum: 
+            - Weekday
+            - Weekend
+          description: "The type of day the curtailment applies during (weekday or weekend)"
+        startTime:
+          type: string
+          format: date-time
+          description: "The start time of a curtailment (inclusive)"
+        endTime:
+          type: string
+          format: date-time
+          description: "The end time of a curtailment (exclusive)"
+      required:
+        - name
+        - description
+        - type
+        - curtailedBy
