@@ -1,6 +1,6 @@
 openapi: "3.0.0"
 info:
-  description: "This is the Ofgem network heatmap data JSON API standard. An example of this data being used can be found at [www.opengrid.com/heatmaps-example/](https://www.opengrid.com/heatmaps-example/)"
+  description: "This is the Ofgem network heatmap data JSON API standard. The documentation for this standard can be found at [opengridsystems.github.io/network-heatmaps-api](https://opengridsystems.github.io/network-heatmaps-api/). An example of this data being used can be found at [opengridsystems.github.io/network-heatmaps-example](https://opengridsystems.github.io/network-heatmaps-example/)"
   version: "0.9.0"
   title: "Ofgem Heatmap API"
   contact:
