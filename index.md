@@ -22,7 +22,7 @@ The elements and definitions were initially developed with an [Excel Spreadsheet
 
 Sample data has been provided, derived from public [network demand & generation capacity](https://network-maps.ssen.co.uk/) data supplied by [SSEN](https://www.ssen.co.uk/).
 
-The data set used in this sample data is **not** current, and reflects a historical set.  It also contains two example circuits in the Perth area that are included for illustrativen purposes.
+The data set used in this sample data is **not** current, and reflects a historical set.  It also contains two example circuits in the Perth area that are included for illustrative purposes.
 
 The data is available as:
 - [JSON](./sample-data/sample-data.json)
@@ -32,5 +32,6 @@ Both files are derived from the same source.  The only additional data in the JS
 
 # Attribution & Licensing
 
-The sample data is &copy; Copyright 2022 Scottish & Southern Electricity Networks
+The sample network heatmap data is &copy; Copyright 2022 Scottish & Southern Electricity Networks
+
 The documentation is made available under the [Open Government License 3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
