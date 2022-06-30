@@ -172,63 +172,59 @@ components:
           type: string
           format: Identifier
           description: "The identifier of the Primary this Substation is supplied by. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP, BSP or Primary Substation will not have this reference ()"
-        loadTotalCapacity:
+        demandTotalCapacity:
           type: number
           format: MVA
-          description: "The firm capacity for load at the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation ()"
-        loadConnectedCapacity:
+          description: "The firm capacity for demand at the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation ()"
+        demandContractedCapacity:
           type: number
           format: MVA
-          description: "Sum of all load currently connected at the substation. This includes individual loads and storage that are explicitly defined and aggregate value of other connect loads and storage. The value for loadConnectedCapacity must be greater than or equal to the sum of the loadConnectedCapacity values in the Load and Storage elements ()"
-        loadContractedCapacity:
+          description: "Sum of all demand currently contracted at the substation which is not yet connected  (i.e. do not include any demand that is included in demandConnectedCapacity). This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandContractedCapacity must be greater than or equal to the sum of the demandContractedCapacity values in the demand and Storage elements ()"
+        demandQuotedCapacity:
           type: number
           format: MVA
-          description: "Sum of all load currently contracted at the substation which is not yet connected  (i.e. do not include any load that is included in loadConnectedCapacity). This includes individual loads and storage that are explicitly defined and aggregate value of other connect loads and storage. The value for loadContractedCapacity must be greater than or equal to the sum of the loadContractedCapacity values in the Load and Storage elements ()"
-        loadQuotedCapacity:
+          description: "Sum of all demand currently quoted at the substation excluding contracted and connected (i.e. does not include demandConnectedCapacity or demandContractedCapacity). This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandQuotedCapacity must be greater than or equal to the sum of the demandQuotedCapacity values in the demand and Storage elements ()"
+        demandAvailableCapacity:
           type: number
           format: MVA
-          description: "Sum of all load currently quoted at the substation excluding contracted and connected (i.e. does not include loadConnectedCapacity or loadContractedCapacity). This includes individual loads and storage that are explicitly defined and aggregate value of other connect loads and storage. The value for loadQuotedCapacity must be greater than or equal to the sum of the loadQuotedCapacity values in the Load and Storage elements ()"
-        loadAvailableCapacity:
+          description: "The available demand capacity at the substation. This value is calculated based on total firm capacity, maximum demand, contracted capacity, and any other constraints on the network ()"
+        demandMaximum:
           type: number
           format: MVA
-          description: "Available load capacity at the substation calculated as: loadTotalCapacity - (loadMaximum + loadContractedCapacity) ()"
-        loadMaximum:
+          description: "The maximum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions .The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if  corrected, net demand data is not available, the value should be omitted ()"
+        demandMinimum:
           type: number
           format: MVA
-          description: "The maximum load at the substation. This is a normalised value calculated using historic measured values during normal operating conditions .The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if  corrected, net load data is not available, the value should be omitted ()"
-        loadMinimum:
+          description: "The minimum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available, the value should be omitted. ()"
+        demand99Percentile:
           type: number
           format: MVA
-          description: "The minimum load at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if corrected, net load data is not available, the value should be omitted. ()"
-        load99Percentile:
+          description: "The 99th percentile of demanding at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available,  the value should be omitted. ()"
+        demand75Percentile:
           type: number
           format: MVA
-          description: "The 99th percentile of loading at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if corrected, net load data is not available,  the value should be omitted. ()"
-        load75Percentile:
+          description: "The 75th percentile of demanding at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available,  the value should be omitted. ()"
+        demand50Percentile:
           type: number
           format: MVA
-          description: "The 75th percentile of loading at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if corrected, net load data is not available,  the value should be omitted. ()"
-        load50Percentile:
+          description: "The 50th percentile of demanding at the substation. This is a normalised value calculated using historic measured values during normal operating conditions.  The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available,  the value should be omitted."
+        demand25Percentile:
           type: number
           format: MVA
-          description: "The 50th percentile of loading at the substation. This is a normalised value calculated using historic measured values during normal operating conditions.  The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if corrected, net load data is not available,  the value should be omitted."
-        load25Percentile:
-          type: number
-          format: MVA
-          description: "The 25th percentile of loading at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation at the substation, load diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include load data; for substations below 33kV, if  corrected, net load data is not available,  the value should be omitted."
-        loadConstraint:
+          description: "The 25th percentile of demanding at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if  corrected, net demand data is not available,  the value should be omitted."
+        demandConstraint:
           type: string
           enum: 
             - Red
             - Amber
             - Green
-          description: "A RAG definition of the load constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation ()"
-        loadConstraintLimitingFactor:
+          description: "A RAG definition of the demand constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation ()"
+        demandConstraintLimitingFactor:
           type: string
           enum: 
             - Thermal
             - FaultLevel
-          description: "The limiting factor for load constraints, either thermal or fault level ()"
+          description: "The limiting factor for demand constraints, either thermal, voltage or fault level ()"
         generationTotalCapacity:
           type: number
           format: MVA
@@ -248,14 +244,14 @@ components:
         generationAvailableCapacity:
           type: number
           format: MVA
-          description: "Available generation capacity at the substation calculated as: generationTotalCapacity - (generationConnectedCapacity +generationContractedCapacity) + loadMinimum ()"
+          description: "Available generation capacity at the substation.This value is calculated based on total firm generation, capacity, demand, connected capacity, contracted capacity, and any other constraints on the network ()"
         generationConstraint:
           type: string
           enum: 
             - Red
             - Amber
             - Green
-          description: "A RAG definition of the load constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation ()"
+          description: "A RAG definition of the demand constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation ()"
         generationConstraintLimitingFactor:
           type: string
           enum: 
@@ -298,11 +294,11 @@ components:
           type: string
           format: Link
           description: "A URL to the embedded capacity register entry for this station"
-        Loads:
+        Demands:
           type: array
           items:
-            "$ref": "#/components/schemas/Load"
-          description: "The loads at the station covering connected, contracted and quoted"
+            "$ref": "#/components/schemas/Demand"
+          description: "The demands at the station covering connected, contracted and quoted"
         Generators:
           type: array
           items:
@@ -336,12 +332,11 @@ components:
         - voltages
         - longitude
         - latitude
-        - loadTotalCapacity
-        - loadConnectedCapacity
-        - loadContractedCapacity
-        - loadAvailableCapacity
-        - loadConstraint
-        - loadConstraintLimitingFactor
+        - demandTotalCapacity
+        - demandContractedCapacity
+        - demandAvailableCapacity
+        - demandConstraint
+        - demandConstraintLimitingFactor
         - generationTotalCapacity
         - generationConnectedCapacity
         - generationContractedCapacity
@@ -373,61 +368,57 @@ components:
           type: number
           format: kV
           description: "Voltage of the circuit"
-        loadMaximum:
+        demandMaximum:
           type: number
           format: MVA
-          description: "The maximum loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions.  The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
-        loadMinimum:
+          description: "The maximum demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions.  The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+        demandMinimum:
           type: number
           format: MVA
-          description: "The minimum loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if corrected, net load data is not available, the value should be omitted."
-        load99Percentile:
+          description: "The minimum demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if corrected, net demand data is not available, the value should be omitted."
+        demand99Percentile:
           type: number
           format: MVA
-          description: "The 99th percentile of loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
-        load75Percentile:
+          description: "The 99th percentile of demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+        demand75Percentile:
           type: number
           format: MVA
-          description: "The 75th percentile of loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
-        load50Percentile:
+          description: "The 75th percentile of demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+        demand50Percentile:
           type: number
           format: MVA
-          description: "The 50th percentile of loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
-        load25Percentile:
+          description: "The 50th percentile of demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+        demand25Percentile:
           type: number
           format: MVA
-          description: "The 25th percentile of loading on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net load corrected for any generation on the circuit, load diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include load data; for circuits below 33kV, if  corrected, net load data is not available, the value should be omitted."
-        loadConstraint:
+          description: "The 25th percentile of demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+        demandConstraint:
           type: string
           enum: 
             - Red
             - Amber
             - Green
-          description: "A RAG definition of the load constraints on the circuit. A utility should provide details on how this RAG status is calculated"
-        loadTotalCapacity:
+          description: "A RAG definition of the demand constraints on the circuit. A utility should provide details on how this RAG status is calculated"
+        demandAvailableCapacity:
           type: number
           format: MVA
-          description: "The firm capacity for load at the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation"
-        loadAvailableCapacity:
+          description: "The available demand capacity on the circuit. This value is calculated based on the circuit rating, maximum demand, contracted capacity, and any other constraints on the network"
+        demandContractedCapacity:
           type: number
           format: MVA
-          description: "Available load capacity on the circuit calculated as: loadTotalCapacity - (loadMaximum + loadContractedCapacity)"
-        loadConnectedCapacity:
+          description: "Sum of all demand currently contracted on the circuit which are not yet connected  (i.e. do not include any demand that is included in demandConnectedCapacity)."
+        demandQuotedCapacity:
           type: number
           format: MVA
-          description: "Sum of all load currently connected on the circuit"
-        loadContractedCapacity:
+          description: "Sum of all demand currently quoted on the circuit excluding contracted and connected (i.e. does not include demandConnectedCapacity or demandContractedCapacity)."
+        summerRating:
           type: number
           format: MVA
-          description: "Sum of all load currently contracted on the circuit which are not yet connected  (i.e. do not include any load that is included in loadConnectedCapacity)."
-        loadQuotedCapacity:
+          description: "Summer rating for minimum rated section in the circuit (i.e. limiting series element)"
+        winterRating:
           type: number
           format: MVA
-          description: "Sum of all load currently quoted on the circuit excluding contracted and connected (i.e. does not include loadConnectedCapacity or loadContractedCapacity)."
-        rating:
-          type: number
-          format: MVA
-          description: "Minimum rated section in the circuit (i.e. limiting series element)"
+          description: "Winter rating for minimum rated section in the circuit (i.e. limiting series element)"
         FromSubstation:
           type: string
           format: Identifier
@@ -450,50 +441,45 @@ components:
         - mRID
         - name
         - voltage
-        - loadConstraint
+        - demandConstraint
         - FromSubstation
-    Load:
+    Demand:
       type: object
       description: "Represents an individual or aggregated generator at the substation. This may represent the aggregation of all generation at a voltage level or individual connected/contracted/quoted generators"
       properties:
         mRID:
           type: string
           format: Identifier
-          description: "The Master Resource ID of the Load. Persistent across each release of the data"
+          description: "The Master Resource ID of the demand. Persistent across each release of the data"
         name:
           type: string
           format: String
-          description: "The human readable name of the load"
+          description: "The human readable name of the demand"
         aggregate:
           type: boolean
           format: Boolean
-          description: "True if the load represents an aggregation of multiple loads all connected at a single voltage level"
-        loadConnectedCapacity:
+          description: "True if the demand represents an aggregation of multiple demands all connected at a single voltage level"
+        demandContractedCapacity:
           type: number
           format: MVA
-          description: "The currently connected load capacity"
-        loadContractedCapacity:
+          description: "The currently contracted demand capacity which is not yet connected  (i.e. do not include any demand that is included in demandConnectedCapacity)"
+        demandQuotedCapacity:
           type: number
           format: MVA
-          description: "The currently contracted load capacity which is not yet connected  (i.e. do not include any load that is included in loadConnectedCapacity)"
-        loadQuotedCapacity:
-          type: number
-          format: MVA
-          description: "The currently active quoted load capacity excluding contracted and connected (this is optional as connected/contracted generation may not have records of quotes and after a value is contracted this value is no longer relevant)"
+          description: "The currently active quoted demand capacity excluding contracted and connected (this is optional as connected/contracted generation may not have records of quotes and after a value is contracted this value is no longer relevant)"
         voltage:
           type: number
           format: kV
-          description: "The voltage the load is connected at"
+          description: "The voltage the demand is connected at"
         technologyType:
           type: string
           format: String
-          description: "The technology the connected load"
+          description: "The technology the connected demand"
       required:
         - mRID
         - name
         - aggregate
-        - loadConnectedCapacity
-        - loadContractedCapacity
+        - demandContractedCapacity
         - voltage
     Generator:
       type: object
@@ -502,7 +488,7 @@ components:
         mRID:
           type: string
           format: Identifier
-          description: "The Master Resource ID of the Load. Persistent across each release of the data"
+          description: "The Master Resource ID of the Generator. Persistent across each release of the data"
         name:
           type: string
           format: String
@@ -554,18 +540,18 @@ components:
           type: boolean
           format: Boolean
           description: "True if the generator represents an aggregation of multiple storage devices all connected at a single voltage level"
-        loadConnectedCapacity:
+        demandConnectedCapacity:
           type: number
           format: MVA
-          description: "The currently connected load capacity"
-        loadContractedCapacity:
+          description: "The currently connected demand capacity"
+        demandContractedCapacity:
           type: number
           format: MVA
-          description: "The currently contracted load capacity which is not yet connected  (i.e. do not include any load that is included in loadConnectedCapacity)"
-        loadQuotedCapacity:
+          description: "The currently contracted demand capacity which is not yet connected  (i.e. do not include any demand that is included in demandConnectedCapacity)"
+        demandQuotedCapacity:
           type: number
           format: MVA
-          description: "The currently active quoted load capacity excluding contracted and connected (this is optional as connected/contracted generation may not have records of quotes and after a value is contracted this value is no longer relevant)"
+          description: "The currently active quoted demand capacity excluding contracted and connected (this is optional as connected/contracted generation may not have records of quotes and after a value is contracted this value is no longer relevant)"
         generationConnectedCapacity:
           type: number
           format: MVA
@@ -590,8 +576,8 @@ components:
         - mRID
         - name
         - aggregate
-        - loadConnectedCapacity
-        - loadContractedCapacity
+        - demandConnectedCapacity
+        - demandContractedCapacity
         - generationConnectedCapacity
         - generationContractedCapacity
         - voltage
@@ -630,10 +616,14 @@ components:
           type: string
           format: String
           description: "Human readble name of the rating"
-        rating:
+        summerRating:
           type: number
           format: MVA
-          description: "Rating in MVA"
+          description: "Summer Rating in MVA"
+        winterRating:
+          type: number
+          format: MVA
+          description: "Winter Rating in MVA"
         fromVoltage:
           type: number
           format: kV
@@ -644,7 +634,8 @@ components:
           description: "To voltage for the rating"
       required:
         - name
-        - rating
+        - summerRating
+        - winterRating
         - fromVoltage
         - toVoltage
     Constraint:
@@ -709,7 +700,7 @@ components:
         - latitude
     Curtailment:
       type: object
-      description: "Curtailment of load or generation capacity at the substation with optional day/time and season parameters"
+      description: "Curtailment of demand or generation capacity at the substation with optional day/time and season parameters"
       properties:
         name:
           type: string
@@ -722,13 +713,13 @@ components:
         type:
           type: string
           enum: 
-            - Load
+            - Demand
             - Generation
           description: "The type of curtailment (enumerated field to allow for easier processing/identification)"
         curtailedBy:
           type: number
           format: MVA
-          description: "The amount the load/generation capacity is curtailed by"
+          description: "The amount the demand/generation capacity is curtailed by"
         technologyType:
           type: string
           format: String
