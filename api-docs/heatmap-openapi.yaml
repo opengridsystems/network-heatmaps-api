@@ -117,15 +117,16 @@ components:
         - valid
     Substation:
       type: object
+      description: "A Substation with connect demand, generation or storage. A substation can be either a Grid Supply Point (GSP), Bulk Supply Point (BSP), Primary or Secondary station"
       properties:
         mRID:
           type: string
           format: Identifier
-          description: "The Master Resource ID of the Substation. Persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM Substation ()"
+          description: "The Master Resource ID of the Substation. Where CIM data is being produced for LTDS this ID should be present, persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM Substation.  If data is produced prior to the CIM LTDS data being published this attribute is optional. ()"
         name:
           type: string
           format: String
-          description: "The human readable name of the substation ()"
+          description: "The human readable name of the substation. This should be consistent with the naming used in LTDS, either Tables 1-8 of existing Excel format, or CIM Substation names for the CIM LTDS data ()"
         type:
           type: string
           enum: 
@@ -137,7 +138,7 @@ components:
         area:
           type: string
           format: LicenseArea
-          description: "The name of the license area (e.g. North Scotland, South East England, South Wales)  ()"
+          description: "The name of the license area. This may be the full text name or an abbreviation that should align with the abbreviations used in the license (e.g. Eastern Power Networks or EPN)  ()"
         shortCode:
           type: string
           format: SubstationCode
@@ -172,7 +173,7 @@ components:
           type: string
           format: Identifier
           description: "The identifier of the Primary this Substation is supplied by. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP, BSP or Primary Substation will not have this reference ()"
-        demandTotalCapacity:
+        demandFirmCapacity:
           type: number
           format: MVA
           description: "The firm capacity for demand at the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation ()"
@@ -180,6 +181,10 @@ components:
           type: number
           format: MVA
           description: "Sum of all demand currently contracted at the substation which is not yet connected  (i.e. do not include any demand that is included in demandConnectedCapacity). This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandContractedCapacity must be greater than or equal to the sum of the demandContractedCapacity values in the demand and Storage elements ()"
+        demandConnectedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all demand currently connected at the substation. This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandConnectedCapacity must be greater than or equal to the sum of the demandConnectedCapacity values in the demand and Storage elements. ()"
         demandQuotedCapacity:
           type: number
           format: MVA
@@ -187,15 +192,15 @@ components:
         demandAvailableCapacity:
           type: number
           format: MVA
-          description: "The available demand capacity at the substation. This value is calculated based on total firm capacity, maximum demand, contracted capacity, and any other constraints on the network ()"
+          description: "The available demand capacity at the substation. This value is calculated based on total firm capacity, maximum demand, connected capacity, quoted capacity, contracted capacity, and any other constraints on the network. The value should reflect the capacity a network operator would make available to a connecting party, which may be calcualted for the most onerous season, or a value based on more detailed analysis and internal policies ()"
         demandMaximum:
           type: number
           format: MVA
-          description: "The maximum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions .The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if  corrected, net demand data is not available, the value should be omitted ()"
+          description: "The maximum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions .The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if  corrected, net demand data is not available, the value should be omitted. Users wishing to see separate summer/winter peaks can obtain this from the LTDS data ()"
         demandMinimum:
           type: number
           format: MVA
-          description: "The minimum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available, the value should be omitted. ()"
+          description: "The minimum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available, the value should be omitted. Users wishing to see separate summer/winter peaks can obtain this from the LTDS data ()"
         demand99Percentile:
           type: number
           format: MVA
@@ -223,9 +228,10 @@ components:
           type: string
           enum: 
             - Thermal
+            - Voltage
             - FaultLevel
-          description: "The limiting factor for demand constraints, either thermal, voltage or fault level ()"
-        generationTotalCapacity:
+          description: "The limiting factor for demand constraints, either thermal, voltage or fault level for the demandConstraint value ()"
+        generationFirmCapacity:
           type: number
           format: MVA
           description: "The total firm generation capacity of the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation ()"
@@ -244,7 +250,7 @@ components:
         generationAvailableCapacity:
           type: number
           format: MVA
-          description: "Available generation capacity at the substation.This value is calculated based on total firm generation, capacity, demand, connected capacity, contracted capacity, and any other constraints on the network ()"
+          description: "Available generation capacity at the substation.This value is calculated based on total firm generation, capacity, demand, connected capacity, quoted capacity, contracted capacity, and any other constraints on the network ()"
         generationConstraint:
           type: string
           enum: 
@@ -256,8 +262,9 @@ components:
           type: string
           enum: 
             - Thermal
+            - Voltage
             - FaultLevel
-          description: "The limiting factor for generation constraints, either thermal or fault level"
+          description: "The limiting factor for generation constraints, either thermal or fault level for the generationConstraint value"
         breakerRatedCurrent:
           type: number
           format: kA
@@ -298,17 +305,17 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/Demand"
-          description: "The demands at the station covering connected, contracted and quoted"
+          description: "The demands at the station covering connected, contracted and quoted. This data is optional and may aggregated into the substation attributes, but utilities may optionally provide details on individual demands."
         Generators:
           type: array
           items:
             "$ref": "#/components/schemas/Generator"
-          description: "The generators at the station covering connected, contracted and quoted"
+          description: "The generators at the station covering connected, contracted and quoted.  This data is optional and may aggregated into the substation attributes, but utilities may optionally provide details on individual generators."
         Storage:
           type: array
           items:
             "$ref": "#/components/schemas/Storage"
-          description: "The storage devices at the station covering connected, contracted and quoted ()"
+          description: "The storage devices at the station covering connected, contracted and quoted. This data is optional and may aggregated into the substation attributes, but utilities may optionally provide details on individual storage devices ()"
         OtherConstraints:
           type: array
           items:
@@ -325,37 +332,30 @@ components:
             "$ref": "#/components/schemas/Curtailment"
           description: "Curtailments at the Substation"
       required:
-        - mRID
         - name
         - type
-        - shortCode
+        - area
         - voltages
         - longitude
         - latitude
-        - demandTotalCapacity
-        - demandContractedCapacity
+        - demandFirmCapacity
         - demandAvailableCapacity
         - demandConstraint
         - demandConstraintLimitingFactor
-        - generationTotalCapacity
-        - generationConnectedCapacity
-        - generationContractedCapacity
+        - generationFirmCapacity
         - generationAvailableCapacity
         - generationConstraint
         - generationConstraintLimitingFactor
-        - breakerRatedCurrent
-        - breakerBreakingCapacity
-        - breakerAvailableCapacity
         - reversePowerFlowTotalCapacity
         - reversePowerFlowAvailableCapacity
     Circuit:
       type: object
-      description: "A circuit representing a connection between substations. This could be an HV circuit between stations or a circuit feeding multiple stations from a primary"
+      description: "A circuit representing a connection between substations. This could be an HV circuit between stations or a circuit feeding multiple secondary stations from a primary. This data element is provided to support utilities that wish to share specfic or all circuits."
       properties:
         mRID:
           type: string
           format: Identifier
-          description: "The Master Resource ID of the Circuit. Persistent across each release of the data"
+          description: "The Master Resource ID of the Circuit.  Where CIM data is being produced for LTDS this ID should be present, persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM elements.  If data is produced prior to the CIM LTDS data being published this attribute is optional."
         name:
           type: string
           format: String
@@ -371,27 +371,27 @@ components:
         demandMaximum:
           type: number
           format: MVA
-          description: "The maximum demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions.  The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+          description: "The maximum load on the circuit. This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
         demandMinimum:
           type: number
           format: MVA
-          description: "The minimum demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if corrected, net demand data is not available, the value should be omitted."
+          description: "The minimum demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data."
         demand99Percentile:
           type: number
           format: MVA
-          description: "The 99th percentile of demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+          description: "The 99th percentile of demand on the circuit. This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
         demand75Percentile:
           type: number
           format: MVA
-          description: "The 75th percentile of demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+          description: "The 75th percentile of demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
         demand50Percentile:
           type: number
           format: MVA
-          description: "The 50th percentile of demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+          description: "The 50th percentile of demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
         demand25Percentile:
           type: number
           format: MVA
-          description: "The 25th percentile of demanding on the circuit. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation on the circuit, demand diversity factors, and any other internal processing normally undertaken. All circuits at 33kV and above must include demand data; for circuits below 33kV, if  corrected, net demand data is not available, the value should be omitted."
+          description: "The 25th percentile of demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
         demandConstraint:
           type: string
           enum: 
@@ -403,6 +403,10 @@ components:
           type: number
           format: MVA
           description: "The available demand capacity on the circuit. This value is calculated based on the circuit rating, maximum demand, contracted capacity, and any other constraints on the network"
+        demandConnectedCapacity:
+          type: number
+          format: MVA
+          description: "Sum of all demand currently connected on the circuit"
         demandContractedCapacity:
           type: number
           format: MVA
@@ -422,13 +426,13 @@ components:
         FromSubstation:
           type: string
           format: Identifier
-          description: "mRID of the Substation the Circuit is from"
+          description: "mRID of the Substation the Circuit is from (used where CIM data is being produced and the mRID attributes are populated for Substations). Where no CIM mRID is yet being produced, the name of the Substation should be used"
         ToSubstation:
           type: array
           items:
             type: string
             format: Identifier
-          description: "mRID of the Substations the Circuit is to (optional if LV circuits are shown but no LV/Secondary substations)"
+          description: "mRID of the Substations the Circuit is to (optional if LV circuits are shown but no LV/Secondary substations). Where CIM data is being produced the identifiers attributes reflect the mRID of the Substations . Where no CIM mRID is yet being produced, the names of the Substations should be used"
         OtherConstraints:
           type: array
           items:
@@ -445,12 +449,12 @@ components:
         - FromSubstation
     Demand:
       type: object
-      description: "Represents an individual or aggregated generator at the substation. This may represent the aggregation of all generation at a voltage level or individual connected/contracted/quoted generators"
+      description: "Represents an individual or aggregated demand at the substation. This may represent the aggregation of all generation at a voltage level or individual connected/contracted/quoted generators"
       properties:
         mRID:
           type: string
           format: Identifier
-          description: "The Master Resource ID of the demand. Persistent across each release of the data"
+          description: "The Master Resource ID of the demand. Where CIM data is being produced for LTDS this ID should be present, persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM elements.  If data is produced prior to the CIM LTDS data being published this attribute is optional."
         name:
           type: string
           format: String
@@ -459,6 +463,10 @@ components:
           type: boolean
           format: Boolean
           description: "True if the demand represents an aggregation of multiple demands all connected at a single voltage level"
+        demandConnectedCapacity:
+          type: number
+          format: MVA
+          description: "The currently connected demand capacity"
         demandContractedCapacity:
           type: number
           format: MVA
@@ -476,10 +484,9 @@ components:
           format: String
           description: "The technology the connected demand"
       required:
-        - mRID
         - name
         - aggregate
-        - demandContractedCapacity
+        - demandConnectedCapacity
         - voltage
     Generator:
       type: object
@@ -488,7 +495,7 @@ components:
         mRID:
           type: string
           format: Identifier
-          description: "The Master Resource ID of the Generator. Persistent across each release of the data"
+          description: "The Master Resource ID of the Generator. Where CIM data is being produced for LTDS this ID should be present, persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM elements.  If data is produced prior to the CIM LTDS data being published this attribute is optional."
         name:
           type: string
           format: String
@@ -496,7 +503,7 @@ components:
         aggregate:
           type: boolean
           format: Boolean
-          description: "True if the generator represents an aggregation of multiple generators all connected at a single voltage level"
+          description: "True if the generator represents an aggregation of multiple generators all connected at a single voltage level. If technologyType is left blank it is assumed that the Generator aggregates all generation types. If technologyType is populated and aggregate is true the Generator reflects the aggregate of that type of generation"
         generationConnectedCapacity:
           type: number
           format: MVA
@@ -531,7 +538,7 @@ components:
         mRID:
           type: string
           format: Identifier
-          description: "The Master Resource ID of the Stroage device. Persistent across each release of the data"
+          description: "The Master Resource ID of the Storage device. Where CIM data is being produced for LTDS this ID should be present, persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM elements.  If data is produced prior to the CIM LTDS data being published this attribute is optional."
         name:
           type: string
           format: String
@@ -539,7 +546,7 @@ components:
         aggregate:
           type: boolean
           format: Boolean
-          description: "True if the generator represents an aggregation of multiple storage devices all connected at a single voltage level"
+          description: "True if the generator represents an aggregation of multiple storage devices all connected at a single voltage level. If technologyType is left blank it is assumed that the Storage aggregates all storage types. If technologyType is populated and aggregate is true the Storage reflects the aggregate of that type of storage"
         demandConnectedCapacity:
           type: number
           format: MVA
@@ -588,7 +595,7 @@ components:
         mRID:
           type: string
           format: Identifier
-          description: "The Master Resource ID of the Substation. Persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM PowerTransformer"
+          description: "mRID of the Substation the Transformer is within (used where CIM data is being produced and the mRID attributes are populated for Substations). Where no CIM mRID is yet being produced, the name of the Substation should be used"
         name:
           type: string
           format: String
@@ -640,7 +647,7 @@ components:
         - toVoltage
     Constraint:
       type: object
-      description: "An additional constraint on the Substation or Circuit. This is intended for non-numeric constraints e.g. to denote physical restrictions on reinforcement"
+      description: "An additional constraint/restriction on the Substation or Circuit. This is intended for non-numeric constraints e.g. to denote physical restrictions on reinforcement"
       properties:
         name:
           type: string
@@ -674,6 +681,8 @@ components:
           items:
             "$ref": "#/components/schemas/Line"
           description: "The Line elements"
+      required:
+        - type
     Line:
       type: object
       description: "A series of coordinates"
