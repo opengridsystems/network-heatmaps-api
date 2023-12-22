@@ -36,6 +36,7 @@ components:
   schemas:
     HeatmapDataSet:
       type: object
+      description: "A single instance of a published dataset. The descriptions of these fields are taken from the Dublin Core Standard"
       properties:
         contributor:
           type: string
@@ -95,12 +96,12 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/Substation"
-          description: "A list of substations with heatmap data ()"
+          description: "A list of substations with heatmap data"
         Circuits:
           type: array
           items:
             "$ref": "#/components/schemas/Circuit"
-          description: "A list of circuits with heatmap data ()"
+          description: "A list of circuits with heatmap data"
       required:
         - contributor
         - coverage
@@ -122,11 +123,11 @@ components:
         mRID:
           type: string
           format: Identifier
-          description: "The Master Resource ID of the Substation. Where CIM data is being produced for LTDS this ID should be present, persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM Substation.  If data is produced prior to the CIM LTDS data being published this attribute is optional. ()"
+          description: "The Master Resource ID of the Substation. Where CIM data is being produced for LTDS this ID should be present, persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM Substation.  If data is produced prior to the CIM LTDS data being published this attribute is optional."
         name:
           type: string
           format: String
-          description: "The human readable name of the substation. This should be consistent with the naming used in LTDS, either Tables 1-8 of existing Excel format, or CIM Substation names for the CIM LTDS data ()"
+          description: "The human readable name of the substation. This should be consistent with the naming used in LTDS, either Tables 1-8 of existing Excel format, or CIM Substation names for the CIM LTDS data"
         type:
           type: string
           enum: 
@@ -134,81 +135,81 @@ components:
             - BSP
             - Primary
             - Secondary
-          description: "The type of the substation ()"
+          description: "The type of the substation"
         area:
           type: string
           format: LicenseArea
-          description: "The name of the license area. This may be the full text name or an abbreviation that should align with the abbreviations used in the license (e.g. Eastern Power Networks or EPN)  ()"
+          description: "The name of the license area. This may be the full text name or an abbreviation that should align with the abbreviations used in the license (e.g. Eastern Power Networks or EPN) "
         shortCode:
           type: string
           format: SubstationCode
-          description: "Short code name for substation (alphanumeric, uppercase letters only) ()"
+          description: "Short code name for substation (alphanumeric, uppercase letters only)"
         description:
           type: string
           format: String
-          description: "Free text for any additional descriptive data about the substation ()"
+          description: "Free text for any additional descriptive data about the substation"
         voltages:
           type: array
           items:
             type: number
             format: kV
-          description: "The voltages at the Substation in Kilovolts (kV) ()"
+          description: "The voltages at the Substation in Kilovolts (kV)"
         longitude:
           type: number
           format: DecimalDegrees
-          description: "The longitude value of the substation as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the feature itself allowing for more complex geometry ()"
+          description: "The longitude value of the substation as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the feature itself allowing for more complex geometry"
         latitude:
           type: number
           format: DecimalDegrees
-          description: "The latitude value of the substation as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the feature itself allowing for more complex geometry ()"
+          description: "The latitude value of the substation as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the feature itself allowing for more complex geometry"
         GSP:
           type: string
           format: Identifier
-          description: "The name of the GSP this Substation is within. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP Substation will not have this reference ()"
+          description: "The name or identifier of the GSP this Substation is within. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP Substation will not have this reference"
         BSP:
           type: string
           format: Identifier
-          description: "The identifier of the BSP this Substation is supplied by. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP or BSP Substation will not have this reference, and the Scottish networks do not have BSPs ()"
+          description: "The name or identifier of the BSP this Substation is supplied by. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP or BSP Substation will not have this reference, and the Scottish networks do not have BSPs"
         Primary:
           type: string
           format: Identifier
-          description: "The identifier of the Primary this Substation is supplied by. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP, BSP or Primary Substation will not have this reference ()"
+          description: "The name or identifier of the Primary this Substation is supplied by. It is assumed the corresponding Substation will be contained within the data. Optional as a GSP, BSP or Primary Substation will not have this reference"
         demandFirmCapacity:
           type: number
           format: MVA
-          description: "The firm capacity for demand at the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation ()"
+          description: "The firm capacity for demand at the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation"
         demandContractedCapacity:
           type: number
           format: MVA
-          description: "Sum of all demand currently contracted at the substation which is not yet connected  (i.e. do not include any demand that is included in demandConnectedCapacity). This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandContractedCapacity must be greater than or equal to the sum of the demandContractedCapacity values in the demand and Storage elements ()"
+          description: "Sum of all demand currently contracted at the substation which is not yet connected  (i.e. do not include any demand that is included in demandConnectedCapacity). This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandContractedCapacity must be greater than or equal to the sum of the demandContractedCapacity values in the demand and Storage elements"
         demandConnectedCapacity:
           type: number
           format: MVA
-          description: "Sum of all demand currently connected at the substation. This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandConnectedCapacity must be greater than or equal to the sum of the demandConnectedCapacity values in the demand and Storage elements. ()"
+          description: "Sum of all demand currently connected at the substation. This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandConnectedCapacity must be greater than or equal to the sum of the demandConnectedCapacity values in the demand and Storage elements."
         demandQuotedCapacity:
           type: number
           format: MVA
-          description: "Sum of all demand currently quoted at the substation excluding contracted and connected (i.e. does not include demandConnectedCapacity or demandContractedCapacity). This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandQuotedCapacity must be greater than or equal to the sum of the demandQuotedCapacity values in the demand and Storage elements ()"
+          description: "Sum of all demand currently quoted at the substation excluding contracted and connected (i.e. does not include demandConnectedCapacity or demandContractedCapacity). This includes individual demands and storage that are explicitly defined and aggregate value of other connect demands and storage. The value for demandQuotedCapacity must be greater than or equal to the sum of the demandQuotedCapacity values in the demand and Storage elements"
         demandAvailableCapacity:
           type: number
           format: MVA
-          description: "The available demand capacity at the substation. This value is calculated based on total firm capacity, maximum demand, connected capacity, quoted capacity, contracted capacity, and any other constraints on the network. The value should reflect the capacity a network operator would make available to a connecting party, which may be calcualted for the most onerous season, or a value based on more detailed analysis and internal policies ()"
+          description: "The available demand capacity at the substation. This value is calculated based on total firm capacity, maximum demand, connected capacity, quoted capacity, contracted capacity, and any other constraints on the network. The value should reflect the capacity a network operator would make available to a connecting party, which may be calcualted for the most onerous season, or a value based on more detailed analysis and internal policies"
         demandMaximum:
           type: number
           format: MVA
-          description: "The maximum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions .The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if  corrected, net demand data is not available, the value should be omitted. Users wishing to see separate summer/winter peaks can obtain this from the LTDS data ()"
+          description: "The maximum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions .The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if  corrected, net demand data is not available, the value should be omitted. Users wishing to see separate summer/winter peaks can obtain this from the LTDS data"
         demandMinimum:
           type: number
           format: MVA
-          description: "The minimum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available, the value should be omitted. Users wishing to see separate summer/winter peaks can obtain this from the LTDS data ()"
+          description: "The minimum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available, the value should be omitted. Users wishing to see separate summer/winter peaks can obtain this from the LTDS data"
         demand99Percentile:
           type: number
           format: MVA
-          description: "The 99th percentile of demanding at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available,  the value should be omitted. ()"
+          description: "The 99th percentile of demanding at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available,  the value should be omitted."
         demand75Percentile:
           type: number
           format: MVA
-          description: "The 75th percentile of demanding at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available,  the value should be omitted. ()"
+          description: "The 75th percentile of demanding at the substation. This is a normalised value calculated using historic measured values during normal operating conditions. The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available,  the value should be omitted."
         demand50Percentile:
           type: number
           format: MVA
@@ -223,41 +224,41 @@ components:
             - Red
             - Amber
             - Green
-          description: "A RAG definition of the demand constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation ()"
+          description: "A RAG definition of the demand constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation"
         demandConstraintLimitingFactor:
           type: string
           enum: 
             - Thermal
             - Voltage
             - FaultLevel
-          description: "The limiting factor for demand constraints, either thermal, voltage or fault level for the demandConstraint value ()"
+          description: "The limiting factor for demand constraints, either thermal, voltage or fault level for the demandConstraint value"
         generationFirmCapacity:
           type: number
           format: MVA
-          description: "The total firm generation capacity of the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation ()"
+          description: "The total firm generation capacity of the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation"
         generationConnectedCapacity:
           type: number
           format: MVA
-          description: "Sum of all generation currently connected at the substation. This includes individual generation and storage that are explicitly defined and aggregate value of other connect generation and storage. The value forgenerationConnectedCapacity must be greater than or equal to the sum of the generationConnectedCapacity values in the Generator and Storage elements ()"
+          description: "Sum of all generation currently connected at the substation. This includes individual generation and storage that are explicitly defined and aggregate value of other connect generation and storage. The value forgenerationConnectedCapacity must be greater than or equal to the sum of the generationConnectedCapacity values in the Generator and Storage elements"
         generationContractedCapacity:
           type: number
           format: MVA
-          description: "Sum of all generation currently contracted at the substation which is not yet connected  (i.e. do not include any generation that is included in generationConnectedCapacity). This includes individual generation and storage that are explicitly defined and aggregate value of other connect generation and storage. The value for generationContractedCapacity must be greater than or equal to the sum of the generationContractedCapacity values in the Generator and Storage elements ()"
+          description: "Sum of all generation currently contracted at the substation which is not yet connected  (i.e. do not include any generation that is included in generationConnectedCapacity). This includes individual generation and storage that are explicitly defined and aggregate value of other connect generation and storage. The value for generationContractedCapacity must be greater than or equal to the sum of the generationContractedCapacity values in the Generator and Storage elements"
         generationQuotedCapacity:
           type: number
           format: MVA
-          description: "Sum of all quoted currently generation at the substation excluding any that are already contracted or connected. This includes individual generation and storage that are explicitly defined and aggregate value of other connect generation and storage. The value for generationQuotedCapacity must be greater than or equal to the sum of the generationQuotedCapacity values in the Generator and Storage elements ()"
+          description: "Sum of all quoted currently generation at the substation excluding any that are already contracted or connected. This includes individual generation and storage that are explicitly defined and aggregate value of other connect generation and storage. The value for generationQuotedCapacity must be greater than or equal to the sum of the generationQuotedCapacity values in the Generator and Storage elements"
         generationAvailableCapacity:
           type: number
           format: MVA
-          description: "Available generation capacity at the substation.This value is calculated based on total firm generation, capacity, demand, connected capacity, quoted capacity, contracted capacity, and any other constraints on the network ()"
+          description: "Available generation capacity at the substation.This value is calculated based on total firm generation, capacity, demand, connected capacity, quoted capacity, contracted capacity, and any other constraints on the network"
         generationConstraint:
           type: string
           enum: 
             - Red
             - Amber
             - Green
-          description: "A RAG definition of the demand constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation ()"
+          description: "A RAG definition of the demand constraints at the substation. A utility should provide details on how this RAG status is calculated as part of the accompanying documentation"
         generationConstraintLimitingFactor:
           type: string
           enum: 
@@ -315,7 +316,7 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/Storage"
-          description: "The storage devices at the station covering connected, contracted and quoted. This data is optional and may aggregated into the substation attributes, but utilities may optionally provide details on individual storage devices ()"
+          description: "The storage devices at the station covering connected, contracted and quoted. This data is optional and may aggregated into the substation attributes, but utilities may optionally provide details on individual storage devices"
         OtherConstraints:
           type: array
           items:
@@ -487,6 +488,7 @@ components:
         - name
         - aggregate
         - demandConnectedCapacity
+        - demandContractedCapacity
         - voltage
     Generator:
       type: object
@@ -525,7 +527,6 @@ components:
           format: String
           description: "The technology the connected generation e.g. CHP, Wind, PV, Battery"
       required:
-        - mRID
         - name
         - aggregate
         - generationConnectedCapacity
@@ -580,7 +581,6 @@ components:
           format: String
           description: "The technology the connected generation e.g. PumpStorage, Battery"
       required:
-        - mRID
         - name
         - aggregate
         - demandConnectedCapacity
@@ -595,7 +595,7 @@ components:
         mRID:
           type: string
           format: Identifier
-          description: "mRID of the Substation the Transformer is within (used where CIM data is being produced and the mRID attributes are populated for Substations). Where no CIM mRID is yet being produced, the name of the Substation should be used"
+          description: "The Master Resource ID of the Traansformer. Where CIM data is being produced for LTDS this ID should be present, persistent across each release of the data and should be the same as the mRID/rdf:ID of the CIM PowerTransformer.  If data is produced prior to the CIM LTDS data being published this attribute is optional."
         name:
           type: string
           format: String
@@ -612,7 +612,6 @@ components:
             "$ref": "#/components/schemas/Rating"
           description: "The ratings of the transformer as defined by the Ratings element"
       required:
-        - mRID
         - name
         - voltages
     Rating:
@@ -668,45 +667,6 @@ components:
         - name
         - description
         - type
-    Geometry:
-      type: object
-      description: "The geometry of the line, this will be one or more Lines i.e. series of ordered coordinates. Multiple Lines allowed to allow for radial geometries. It is likely that this will be rendered as a GeoJSON geometry in that format"
-      properties:
-        type:
-          type: string
-          format: String
-          description: "The geometry type (LineString or MultiLineString)"
-        Lines:
-          type: array
-          items:
-            "$ref": "#/components/schemas/Line"
-          description: "The Line elements"
-      required:
-        - type
-    Line:
-      type: object
-      description: "A series of coordinates"
-      properties:
-        Coordinates:
-          type: array
-          items:
-            "$ref": "#/components/schemas/Coordinate"
-          description: "2 or more coordinates for a line"
-    Coordinate:
-      type: object
-      description: "A coordinate of latitude/longitude"
-      properties:
-        longitude:
-          type: number
-          format: DecimalDegrees
-          description: "The longitude value of the coordinate as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the LineString geometry"
-        latitude:
-          type: number
-          format: DecimalDegrees
-          description: "The latitude value of the coordinate as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the LineString geometry"
-      required:
-        - longitude
-        - latitude
     Curtailment:
       type: object
       description: "Curtailment of demand or generation capacity at the substation with optional day/time and season parameters"
@@ -760,3 +720,42 @@ components:
         - description
         - type
         - curtailedBy
+    Geometry:
+      type: object
+      description: "The geometry of the line, this will be one or more Lines i.e. series of ordered coordinates. Multiple Lines allowed to allow for radial geometries. It is likely that this will be rendered as a GeoJSON geometry in that format"
+      properties:
+        type:
+          type: string
+          format: String
+          description: "The geometry type (LineString or MultiLineString)"
+        Lines:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Line"
+          description: "The Line elements"
+      required:
+        - type
+    Line:
+      type: object
+      description: "A series of coordinates"
+      properties:
+        Coordinates:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Coordinate"
+          description: "2 or more coordinates for a line"
+    Coordinate:
+      type: object
+      description: "A coordinate of latitude/longitude"
+      properties:
+        longitude:
+          type: number
+          format: DecimalDegrees
+          description: "The longitude value of the coordinate as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the LineString geometry"
+        latitude:
+          type: number
+          format: DecimalDegrees
+          description: "The latitude value of the coordinate as a single latitude/longitude point. For a GeoJSON Heatmap format this data will be part of the LineString geometry"
+      required:
+        - longitude
+        - latitude
