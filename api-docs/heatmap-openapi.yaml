@@ -139,7 +139,7 @@ components:
         area:
           type: string
           format: LicenseArea
-          description: "The name of the license area. This may be the full text name or an abbreviation that should align with the abbreviations used in the license (e.g. Eastern Power Networks or EPN) "
+          description: "The name of the license area. This should be the abbreviation used in the license (e.g. EPN for Eastern Power Networks)"
         shortCode:
           type: string
           format: SubstationCode
@@ -197,7 +197,7 @@ components:
         demandMaximum:
           type: number
           format: MVA
-          description: "The maximum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions .The data represents net demand corrected for any generation at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if  corrected, net demand data is not available, the value should be omitted. Users wishing to see separate summer/winter peaks can obtain this from the LTDS data"
+          description: "The maximum demand at the substation. This is a normalised value calculated using historic measured values during normal operating conditions .The data represents net demand without removing the impact of any generation on observed demand at the substation, demand diversity factors, and any other internal processing normally undertaken. All substations at 33kV and above must include demand data; for substations below 33kV, if corrected, net demand data is not available, the value should be omitted. Users wishing to see separate summer/winter peaks can obtain this from the LTDS data"
         demandMinimum:
           type: number
           format: MVA
@@ -235,7 +235,7 @@ components:
         generationFirmCapacity:
           type: number
           format: MVA
-          description: "The total firm generation capacity of the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation"
+          description: "The total firm generation capacity of the substation. Any constraints that impact this capacity should be listed as individual constraints linked to the substation. The approach used to calculate this value should be defined in accompanying documentation "
         generationConnectedCapacity:
           type: number
           format: MVA
@@ -251,7 +251,7 @@ components:
         generationAvailableCapacity:
           type: number
           format: MVA
-          description: "Available generation capacity at the substation.This value is calculated based on total firm generation, capacity, demand, connected capacity, quoted capacity, contracted capacity, and any other constraints on the network"
+          description: "Available generation capacity at the substation.This value is calculated based on total firm generation, capacity, demand, connected capacity, contracted capacity, and any other constraints on the network"
         generationConstraint:
           type: string
           enum: 
@@ -372,27 +372,27 @@ components:
         demandMaximum:
           type: number
           format: MVA
-          description: "The maximum load on the circuit. This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
+          description: "The maximum load on the circuit. This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions."
         demandMinimum:
           type: number
           format: MVA
-          description: "The minimum demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data."
+          description: "The minimum demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions."
         demand99Percentile:
           type: number
           format: MVA
-          description: "The 99th percentile of demand on the circuit. This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
+          description: "The 99th percentile of demand on the circuit. This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions."
         demand75Percentile:
           type: number
           format: MVA
-          description: "The 75th percentile of demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
+          description: "The 75th percentile of demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions."
         demand50Percentile:
           type: number
           format: MVA
-          description: "The 50th percentile of demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
+          description: "The 50th percentile of demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions."
         demand25Percentile:
           type: number
           format: MVA
-          description: "The 25th percentile of demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions. All circuits at 33kV and above must include demand data"
+          description: "The 25th percentile of demand on the circuit.  This is a value calculated using historic measured values and would not necessarily be corrected for generation on the circuit and normal operating conditions."
         demandConstraint:
           type: string
           enum: 
@@ -450,7 +450,7 @@ components:
         - FromSubstation
     Demand:
       type: object
-      description: "Represents an individual or aggregated demand at the substation. This may represent the aggregation of all generation at a voltage level or individual connected/contracted/quoted generators"
+      description: "Represents an individual or aggregated demand at the substation. This may represent the aggregation of all generation at a voltage level or individual connected/contracted/quoted demand"
       properties:
         mRID:
           type: string
@@ -662,7 +662,7 @@ components:
             - Voltage
             - Physical
             - Other
-          description: "The type of constraint (enumerated field to allow for easier processing/identification)"
+          description: "The type of constraint (enumerated field to allow for easier processing/identification). Limited to Voltage, Physical or Other."
       required:
         - name
         - description
@@ -684,7 +684,7 @@ components:
           enum: 
             - Demand
             - Generation
-          description: "The type of curtailment (enumerated field to allow for easier processing/identification)"
+          description: "The type of curtailment (enumerated field to allow for easier processing/identification). Limited to Demand or Generation"
         curtailedBy:
           type: number
           format: MVA
